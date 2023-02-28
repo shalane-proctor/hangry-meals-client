@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
@@ -6,22 +6,16 @@ import { Button, FloatingLabel } from 'react-bootstrap';
 import { registerUser } from '../../utils/auth';
 import { updateUserProfile } from '../../utils/data/userData';
 
-export default function UserForm({ user, updateUser }) {
+export default function UserForm({ obj }) {
   const [formInput, setFormInput] = useState();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user.id) {
-      setFormInput(user);
-    }
-  }, [user, router]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user?.id) {
+    if (obj?.id) {
       updateUserProfile(formInput).then(() => router.push('/'));
     } else {
-      registerUser(user, formInput).then(() => updateUser(user.uid));
+      registerUser(formInput).then();
       router.push('/');
     }
   };
@@ -37,12 +31,12 @@ export default function UserForm({ user, updateUser }) {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <h1 className="form-titles">{user?.id ? 'Update' : 'Create'} Username</h1>
+        <h1 className="form-titles">{obj?.id ? 'Update' : 'Add'} Item in Pantry</h1>
         <FloatingLabel controlId="floatingTextarea" label="Username" className="mb-3 all-my-form-labels">
-          <Form.Control className="all-my-form-input" as="textarea" placeholder="username" name="username" value={formInput?.username} onChange={handleChange} required />
+          <Form.Control className="all-my-form-input" as="textarea" placeholder="Pantry Item" name="pantryingredient" value={formInput?.ingredient} onChange={handleChange} required />
         </FloatingLabel>
         <Button variant="info" size="lg" className="my-buttons" type="submit">
-          {user?.id ? 'Update' : 'Create'} Profile
+          {obj?.id ? 'Update' : 'Add'}
         </Button>
       </Form>
     </>
@@ -50,10 +44,9 @@ export default function UserForm({ user, updateUser }) {
 }
 
 UserForm.propTypes = {
-  user: PropTypes.shape({
+  obj: PropTypes.shape({
     id: PropTypes.number,
-    uid: PropTypes.string,
-    username: PropTypes.string,
+    pantry: PropTypes.string,
+    ingredient: PropTypes.string,
   }).isRequired,
-  updateUser: PropTypes.func.isRequired,
 };
