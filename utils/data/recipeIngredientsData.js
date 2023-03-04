@@ -7,8 +7,8 @@ const getRecipeIngredients = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getRecipeIngredientsByUser = (userId) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/user-recipeingredient/${userId}/`)
+const getRecipeIngredientsByRecipe = (recipeId) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/recipe-ingredients/${recipeId}/`)
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);
@@ -69,5 +69,5 @@ const deleteRecipeIngredient = (id) => new Promise((resolve, reject) => {
 });
 
 export {
-  getRecipeIngredients, getSingleRecipeIngredient, createRecipeIngredient, updateRecipeIngredient, deleteRecipeIngredient, getRecipeIngredientsByUser,
+  getRecipeIngredients, getSingleRecipeIngredient, createRecipeIngredient, updateRecipeIngredient, deleteRecipeIngredient, getRecipeIngredientsByRecipe,
 };

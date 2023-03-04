@@ -3,21 +3,18 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import { Button, FloatingLabel } from 'react-bootstrap';
-import { registerUser } from '../../utils/auth';
-import { updateUserProfile } from '../../utils/data/userData';
+import { createIngredient } from '../../utils/data/ingredientsData';
+import { createPantryIngredient } from '../../utils/data/pantryIngredientsData';
 
-export default function UserForm({ obj }) {
+export default function PantryForm({ pantryId }) {
   const [formInput, setFormInput] = useState();
   const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (obj?.id) {
-      updateUserProfile(formInput).then(() => router.push('/'));
-    } else {
-      registerUser(formInput).then();
-      router.push('/');
-    }
+    createIngredient(formInput).then((ingredientId) => {
+      createPantryIngredient(ingredientId, pantryId).then(() => router.push('/pantry'));
+    });
   };
 
   const handleChange = (e) => {
@@ -31,22 +28,18 @@ export default function UserForm({ obj }) {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <h1 className="form-titles">{obj?.id ? 'Update' : 'Add'} Item in Pantry</h1>
+        <h1 className="form-titles">Add Item in Pantry</h1>
         <FloatingLabel controlId="floatingTextarea" label="Username" className="mb-3 all-my-form-labels">
           <Form.Control className="all-my-form-input" as="textarea" placeholder="Pantry Item" name="pantryingredient" value={formInput?.ingredient} onChange={handleChange} required />
         </FloatingLabel>
         <Button variant="info" size="lg" className="my-buttons" type="submit">
-          {obj?.id ? 'Update' : 'Add'}
+          Add
         </Button>
       </Form>
     </>
   );
 }
 
-UserForm.propTypes = {
-  obj: PropTypes.shape({
-    id: PropTypes.number,
-    pantry: PropTypes.string,
-    ingredient: PropTypes.string,
-  }).isRequired,
+PantryForm.propTypes = {
+  pantryId: PropTypes.number.isRequired,
 };
