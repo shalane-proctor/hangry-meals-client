@@ -1,8 +1,8 @@
 {
-  "name": "next-firebase-starter",
+  "name": "hangry-meals",
   "private": true,
   "version": "1.0.0",
-  "author": "Trinity Christiana",
+  "author": "Shalane Proctor",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

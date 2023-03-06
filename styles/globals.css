@@ -18,5 +18,15 @@ a {
 }
 
 body {
-  background-color: #88effd;
+  background-color: #e3e3e3;
+}
+
+full-background {
+  background-image: url("https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2022-03/plant-based-food-mc-220323-02-273c7b.jpg");
+  opacity: 0.25;
+  min-height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
 }

@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import WeekCards from '../components/Cards/weekDetails';
-import { getWeeksByUser } from '../utils/data/weekData';
+import WeekCards from '../../components/Cards/weekDetails';
+import { getWeeksByUser } from '../../utils/data/weekData';
 
-function Home() {
+function NextWeek() {
   const [week, setWeek] = useState([]);
   const getAllWeeksByUser = () => {
-    getWeeksByUser().then(setWeek[0]);
+    getWeeksByUser().then(setWeek[1]);
   };
   useEffect(() => {
     getAllWeeksByUser();
@@ -25,4 +25,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default NextWeek;

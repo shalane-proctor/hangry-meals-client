@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import WeekCards from '../components/Cards/weekDetails';
-import { getWeeksByUser } from '../utils/data/weekData';
+import RecipeCards from '../../components/Cards/recipeDetails';
+import { getRecipesByUser } from '../../utils/data/recipeData';
 
-function Home() {
-  const [week, setWeek] = useState([]);
-  const getAllWeeksByUser = () => {
-    getWeeksByUser().then(setWeek[0]);
+function Recipe() {
+  const [recipe, setRecipe] = useState([]);
+  const getAllRecipesByUser = () => {
+    getRecipesByUser().then(setRecipe);
   };
   useEffect(() => {
-    getAllWeeksByUser();
+    getAllRecipesByUser();
   }, []);
   return (
     <>
@@ -20,9 +20,10 @@ function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hangry Meals</title>
       </Head>
-      <WeekCards key={week.id} week={week} />
+      {recipe.map((data) => (
+        <RecipeCards key={data.id} recipe={data} onUpdate={getAllRecipesByUser} />))}
     </>
   );
 }
 
-export default Home;
+export default Recipe;
