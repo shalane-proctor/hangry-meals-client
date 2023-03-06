@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { Button, FloatingLabel } from 'react-bootstrap';
 import { registerUser } from '../../utils/auth';
 import { updateUserProfile } from '../../utils/data/userData';
+import { createPantry } from '../../utils/data/pantryData';
 
 export default function UserForm({ user, updateUser }) {
   const [formInput, setFormInput] = useState();
@@ -22,6 +23,7 @@ export default function UserForm({ user, updateUser }) {
       updateUserProfile(formInput).then(() => router.push('/'));
     } else {
       registerUser(user, formInput).then(() => updateUser(user.uid));
+      createPantry(user.uid).then();
       router.push('/');
     }
   };

@@ -1,22 +1,27 @@
-import { Button } from 'react-bootstrap';
-import { signOut } from '../utils/auth';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import WeekCards from '../components/Cards/weekDetails';
+import { getWeeksByUser } from '../utils/data/weekData';
 
 function Home() {
+  const [week, setWeek] = useState([]);
+  const getAllWeeksByUser = () => {
+    getWeeksByUser().then(setWeek[0]);
+  };
+  useEffect(() => {
+    getAllWeeksByUser();
+  }, []);
   return (
-    <div
-      className="text-center d-flex flex-column justify-content-center align-content-center"
-      style={{
-        height: '90vh',
-        padding: '30px',
-        maxWidth: '400px',
-        margin: '0 auto',
-      }}
-    >
-      <p>Click the button below to logout!</p>
-      <Button variant="danger" type="button" size="lg" className="copy-btn" onClick={signOut}>
-        Sign Out
-      </Button>
-    </div>
+    <>
+      <Head>
+        <meta charset="UTF-8" />
+        <meta name="keywords" content="title, meta, nextjs" />
+        <meta name="author" content="Shalane Proctor" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hangry Meals</title>
+      </Head>
+      <WeekCards key={week.id} week={week} />
+    </>
   );
 }
 

@@ -1,127 +1,143 @@
-// import React, { useState } from 'react';
-// import { useRouter } from 'next/router';
-// // import PropTypes from 'prop-types';
-// import { Button } from 'react-bootstrap';
-// import { getRecipes } from '../../utils/data/recipeData';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { Button } from 'react-bootstrap';
+import { getRecipesByUser, getSingleRecipe } from '../../utils/data/recipeData';
+import {
+  createWeek, getWeeksByUser, updateWeek,
+} from '../../utils/data/weekData';
+import { useAuth } from '../../utils/context/authContext';
 
-// export default function MealForm({}) {
-//   const [mealPlan, setMealPlan] = useState([]);
-//   const [single, setSingle] = useState();
-//   const [recipes, setRecipes] = useState([]);
-//   const router = useRouter();
+export default function WeekForm() {
+  const [current, SetCurrent] = useState([]);
+  const [mealPlan, setMealPlan] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const router = useRouter();
+  const { user } = useAuth();
 
-//   const handleClickWeekOne = () => {
-//     getRecipes().then(setRecipes);
-//     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-//     const chosenRecipes = {};
+  useEffect(() => {
+    getRecipesByUser(user?.id).then(setRecipes);
+    getWeeksByUser(user?.id).then(SetCurrent);
+  }, [user]);
 
-//     // Choose a random day of the week to "go out to eat"
-//     const goingOutDayIndex = Math.floor(Math.random() * daysOfWeek.length);
-//     const goingOutDay = daysOfWeek[goingOutDayIndex];
+  if (recipes.length < 14) {
+    alert('Please add at least 14 recipes before generating a meal plan.');
+  }
 
-//     // Choose a random recipe for each day of the week
-//     daysOfWeek.forEach((day) => {
-//       if (day === goingOutDay) {
-//         chosenRecipes[day] = 'Going out to eat!';
-//       } else {
-//         const randomIndex = Math.floor(Math.random() * recipes.length);
-//         const chosenRecipe = recipes[randomIndex];
-//         chosenRecipes[day] = chosenRecipe;
-//         recipes.splice(randomIndex, 1);
-//       }
-//     });
-//     setMealPlan(chosenRecipes);
-//   };
+  const newWeeks = async () => {
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const currentWeek = {};
+    const nextWeek = {};
+    daysOfWeek.forEach((recipe, index) => {
+      if (index < 7) {
+        currentWeek[daysOfWeek[index]] = recipe;
+      } else {
+        nextWeek[daysOfWeek[index - 7]] = recipe;
+      }
+    });
+    const promises = current === null || current === undefined ? [createWeek(currentWeek), createWeek(nextWeek)] : [updateWeek(currentWeek), updateWeek(nextWeek)];
+    await Promise.all(promises);
+  };
 
-//   const handleClickWeekWith2WC = () => {
-//     getRecipes().then(setRecipes);
-//     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-//     const chosenRecipes = {};
+  // const reRoll = async () => {
+  //   const currentWeek = daysWithRecipe.slice(0, 7);
+  //   await updateWeek(currentWeek).then();
+  // };
 
-//     // Choose two random days of the week to "go out to eat"
-//     const goingOutDays = [];
-//     while (goingOutDays.length < 2) {
-//       const randomIndex = Math.floor(Math.random() * daysOfWeek.length);
-//       const randomDay = daysOfWeek[randomIndex];
-//       if (!goingOutDays.includes(randomDay)) {
-//         goingOutDays.push(randomDay);
-//       }
-//     }
+  const handleClick = () => {
+    // eslint-disable-next-line no-unused-vars
+    let dayIndex = 0;
+    const daysWithRecipe = Array.from({ length: 14 }, () => []);
+    const goingOutDay1 = Math.floor(Math.random() * 7);
+    const goingOutDay2 = Math.floor(Math.random() * 7) + 7;
+    daysWithRecipe[goingOutDay1] = 'Going out to eat';
+    daysWithRecipe[goingOutDay2] = 'Going out to eat';
 
-//     // Choose a random recipe for each day of the week
-//     daysOfWeek.forEach((day) => {
-//       if (goingOutDays.includes(day)) {
-//         chosenRecipes[day] = 'Going out to eat!';
-//       } else {
-//         const randomIndex = Math.floor(Math.random() * recipes.length);
-//         const chosenRecipe = recipes[randomIndex];
-//         chosenRecipes[day] = chosenRecipe;
-//         recipes.splice(randomIndex, 1);
-//       }
-//     });
-//     setMealPlan(chosenRecipes);
-//   };
+    daysWithRecipe.forEach((day, i) => {
+      if (day !== 'Going out to eat') {
+        const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+        daysWithRecipe[i] = randomRecipe.id;
+        dayIndex += 1;
+      }
+      dayIndex %= 7;
+    });
+    setMealPlan(daysWithRecipe);
+    newWeeks();
+  };
 
-//   const handleClickWithNoWC = () => {
-//     getRecipes().then(setRecipes);
-//     const chosenRecipes = [];
-//     const goingOutDay = Math.floor(Math.random() * 6);
+  const handleClickWeekWith2WC = () => {
+    const daysWithRecipe = Array.from({ length: 14 }, () => []);
+    const goingOutDay1 = Math.floor(Math.random() * 7);
+    const goingOutDay2 = Math.floor(Math.random() * 7);
+    const goingOutDay3 = Math.floor(Math.random() * 7) + 7;
+    const goingOutDay4 = Math.floor(Math.random() * 7) + 7;
+    daysWithRecipe[goingOutDay1] = 'Going out to eat';
+    daysWithRecipe[goingOutDay2] = 'Going out to eat';
+    daysWithRecipe[goingOutDay3] = 'Going out to eat';
+    daysWithRecipe[goingOutDay4] = 'Going out to eat';
+    // eslint-disable-next-line no-unused-vars
+    let dayIndex = 0;
+    daysWithRecipe.forEach((day, i) => {
+      if (day !== 'Going out to eat') {
+        const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+        daysWithRecipe[i] = randomRecipe.id;
+        dayIndex += 1;
+      }
+      dayIndex %= 7;
+    });
+    setMealPlan(daysWithRecipe);
+    newWeeks();
+  };
 
-//     recipes.forEach((recipe, index) => {
-//       if (index === goingOutDay) {
-//         chosenRecipes.push({ name: 'Going out to eat!', instructions: '' });
-//       } else {
-//         const randomIndex = Math.floor(Math.random() * recipes.length);
-//         chosenRecipes.push(recipes[randomIndex]);
-//         recipes.splice(randomIndex, 1);
-//       }
-//     });
-//     setMealPlan(chosenRecipes);
-//   };
+  const handleClickWithNoWC = () => {
+    const daysWithRecipe = Array.from({ length: 14 }, () => []);
+    // eslint-disable-next-line no-unused-vars
+    let dayIndex = 0;
+    daysWithRecipe.forEach((day, i) => {
+      const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+      daysWithRecipe[i] = randomRecipe.id;
+      dayIndex += 1;
+      dayIndex %= 7;
+    });
+    setMealPlan(daysWithRecipe);
+    newWeeks(mealPlan);
+  };
 
-//   const handleClickSingle = () => {
-//     getRecipes().then(setRecipes);
-//     const chosenRecipes = [];
-//     const goingOutDay = Math.floor(Math.random() * 6);
+  const handleClickSingle = () => {
+    const randomMeal = Math.floor(Math.random() * recipes.length);
+    getSingleRecipe(randomMeal).then(() => router.push(`/Recipe/${randomMeal}`));
+  };
 
-//     recipes.forEach((recipe, index) => {
-//       if (index === goingOutDay) {
-//         chosenRecipes.push({ name: 'Going out to eat!', instructions: '' });
-//       } else {
-//         const randomIndex = Math.floor(Math.random() * recipes.length);
-//         chosenRecipes.push(recipes[randomIndex]);
-//         recipes.splice(randomIndex, 1);
-//       }
-//     });
-//     setSingle(chosenRecipes);
-//   };
+  return (
+    <>
+      <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClick}>
+        Click for New Meals for the Week
+      </Button>{' '}
+      <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickWeekWith2WC}>
+        <h2>New Meals with Extra Wild Card</h2>
+        <h6>Extra Order Out Day</h6>
+      </Button>{' '}
+      <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickWithNoWC}>
+        <h2>New Meals with No Wild Card</h2>
+        <h6>No Order Out Day</h6>
+      </Button>
+      <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickSingle}>
+        Click for One Meal
+      </Button>
+    </>
+  );
+}
 
-//   // const mealPlanList = mealPlan.map((meal, index) => <li key={index}>{meal}</li>);
-
-//   return (
-//     <>
-//       <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickWeekOne}>
-//         Click for New Meals for the Week
-//       </Button>{' '}
-//       <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickWeekWith2WC}>
-//         <h2>New Meals with Extra Wild Card</h2>
-//         <h6>Extra Order Out Day</h6>
-//       </Button>{' '}
-//       <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickWithNoWC}>
-//         <h2>New Meals with No Wild Card</h2>
-//         <h6>No Order Out Day</h6>
-//       </Button>
-//       <Button variant="info" size="lg" className="my-buttons" type="button" onClick={handleClickSingle}>
-//         Click for One Meal
-//       </Button>
-//     </>
-//   );
-// }
-
-// // MealForm.propTypes = {
-// //   user: PropTypes.shape({
-// //     id: PropTypes.number,
-// //     uid: PropTypes.string,
-// //     username: PropTypes.string,
-// //   }).isRequired,
-// // };
+WeekForm.propTypes = {
+  week: PropTypes.shape({
+    monday: PropTypes.number,
+    Tuesday: PropTypes.number,
+    wednesday: PropTypes.number,
+    thursday: PropTypes.number,
+    friday: PropTypes.number,
+    saturday: PropTypes.number,
+    sunday: PropTypes.number,
+    id: PropTypes.number,
+    uid: PropTypes.string,
+  }).isRequired,
+};

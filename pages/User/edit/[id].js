@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import UserForm from '../../../components/Forms/userForm';
+import { useAuth } from '../../../utils/context/authContext';
 
-export default function newProfile() {
+export default function EditProfile() {
+  const user = useAuth();
   return (
     <>
       <Head>
@@ -10,7 +12,7 @@ export default function newProfile() {
         <meta name="Username" content="Individual username page" />
       </Head>
       <div className="center-page">
-        <UserForm />
+        <UserForm user={user} />
       </div>
     </>
   );
