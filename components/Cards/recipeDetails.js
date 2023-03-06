@@ -13,7 +13,7 @@ export default function RecipeCards({ recipe, ingredients, onUpdate }) {
 
   return (
     <>
-      <Card className="Monday">
+      <Card className="RecipeCard">
         <Card.Header />
         <Card.Body>
           <Card.Title />

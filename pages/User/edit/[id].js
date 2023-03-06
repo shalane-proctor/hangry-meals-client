@@ -8,7 +8,7 @@ export default function EditProfile() {
   return (
     <>
       <Head>
-        <title>Hangry Meals - Create Username</title>
+        <title>Hangry Meals - Edit Username</title>
         <meta name="Username" content="Individual username page" />
       </Head>
       <div className="center-page">
