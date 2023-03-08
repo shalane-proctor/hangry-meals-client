@@ -8,15 +8,15 @@ const getPantries = () => new Promise((resolve, reject) => {
 });
 
 const getPantriesByUser = (userId) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/user-pantry/${userId}/`)
+  fetch(`${clientCredentials.databaseURL}/user-pantry/${userId}`)
     .then((response) => response.json())
-    .then(resolve)
-    .catch(reject);
+    .then((data) => resolve(data))
+    .catch((error) => reject(error));
 });
 
 const getSinglePantry = (pantryId) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/pantry/${pantryId}`)
-    .then((response) => response.json())
+    .then((response) => response)
     .then((data) => {
       resolve({
         id: data?.id,
@@ -32,7 +32,7 @@ const createPantry = (pantry) => new Promise((resolve, reject) => {
     user: pantry?.user,
   };
   fetch(`${clientCredentials.databaseURL}/pantry`, {
-    method: 'pantry',
+    method: 'POST',
     body: JSON.stringify(pantryObj),
     headers: {
       'content-type': 'application/json',

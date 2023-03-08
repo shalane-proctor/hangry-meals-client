@@ -6,6 +6,9 @@ import Card from 'react-bootstrap/Card';
 export default function WeekCards({ week }) {
   return (
     <>
+      <Link href="Week/new" passHref>
+        <Button>Roll for Weeks</Button>
+      </Link>
       <Card className="Monday">
         <Card.Header>Monday</Card.Header>
         <Card.Body>
@@ -61,7 +64,7 @@ export default function WeekCards({ week }) {
         </Card.Body>
       </Card>
       <Card className="Sunday">
-        <Card.Header>FSunday</Card.Header>
+        <Card.Header>Sunday</Card.Header>
         <Card.Body>
           <Card.Title>{week?.sunday?.recipe?.name}</Card.Title>
           <Link href={`/Recipe/${week?.sunday?.recipe?.id}`} passHref>

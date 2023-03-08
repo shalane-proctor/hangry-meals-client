@@ -2,36 +2,24 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { Button, ListGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
 import { createRecipe, updateRecipe } from '../../utils/data/recipeData';
-import { createIngredient } from '../../utils/data/ingredientsData';
-import { createRecipeIngredient, getRecipeIngredientsByRecipe } from '../../utils/data/recipeIngredientsData';
 
 const recipeInitialState = {
-  id: '',
-  user: '',
+  id: 0,
+  user: 0,
   name: '',
   instructions: '',
 };
 
-const initialState = {
-  id: '',
-  user: '',
-  name: '',
-  in_stock: false,
-};
 export default function RecipeForm({ recipe }) {
   const [formInput, setFormInput] = useState();
-  const [isChecked, setIsChecked] = useState(false);
-  const [ingredientsArray, setIngredientsArray] = useState([]);
-  const [ingredient, setIngredient] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
     if (recipe.id) {
       setFormInput(recipe);
-      getRecipeIngredientsByRecipe(recipe.id).then(setIngredientsArray);
     }
   }, [recipe, user]);
 
@@ -42,18 +30,6 @@ export default function RecipeForm({ recipe }) {
       [name]: value,
     }));
   };
-
-  const handleClick = () => {
-    setIngredientsArray([...ingredientsArray, ingredient]);
-    setIngredient('');
-    const payload = {
-      ...ingredient,
-      user: user.uid,
-      in_stock: isChecked,
-    };
-    createIngredient(payload).then(() => {});
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (recipe.id) {
@@ -67,23 +43,7 @@ export default function RecipeForm({ recipe }) {
         instructions: recipe.instructions,
         user: user.uid,
       };
-      createRecipe(payload).then((recipeId) => {
-        const recipeIngredientsPromises = ingredientsArray.map((item) => {
-          const recipeIngredient = {
-            recipe: recipeId.id,
-            name: item.id,
-          };
-          return createRecipeIngredient(recipeIngredient);
-        });
-        // Use Promise.all() to wait for all of the recipeIngredientsPromises to resolve:
-        return Promise.all(recipeIngredientsPromises);
-      })
-        .then((recipeIngredients) => {
-          console.log('Created recipe ingredients:', recipeIngredients);
-        })
-        .catch((error) => {
-          console.error('Error creating recipe:', error);
-        });
+      createRecipe(payload).then();
     }
   };
 
@@ -97,35 +57,6 @@ export default function RecipeForm({ recipe }) {
         <FloatingLabel controlId="floatingTextarea" label="Instructions" className="mb-3">
           <Form.Control className="all-my-form-input" as="textarea" placeholder="Instructions" name="instructions" value={formInput?.instructions} onChange={handleChange} required />
         </FloatingLabel>
-        <div>
-          <input type="checkbox" name="in_stock" value="in_stock" onChange={(e) => setIsChecked(e.currentTarget.checked)} checked={isChecked} />
-          <button type="button" onClick={() => setIsChecked(!isChecked)}>
-            In Stock?
-          </button>
-        </div>
-        <FloatingLabel controlId="floatingTextarea" label="Ingredient" className="mb-3">
-          <Form.Control className="all-my-form-input" as="textarea" placeholder="Ingredient" name="name" value={ingredient?.name} onChange={handleChange} required />
-        </FloatingLabel>
-        <ListGroup as="ul">
-          {ingredientsArray.map((data) => (!data?.in_stock ? (
-            <ListGroup.Item as="li" key={data?.id}>
-              {data}
-              <Button variant="primary" type="button" className="my-buttons mb-3">
-                X
-              </Button>
-            </ListGroup.Item>
-          ) : (
-            <ListGroup.Item as="li" disabled>
-              {data}
-              <Button variant="primary" type="button" className="my-buttons mb-3">
-                X
-              </Button>
-            </ListGroup.Item>
-          )))}
-        </ListGroup>
-        <Button variant="primary" type="button" className="my-buttons mb-3" onClick={handleClick}>
-          Add ingredients
-        </Button>
         <Button variant="primary" type="submit" className="my-buttons mb-3">
           {recipe.id ? 'Update' : 'Create'} Recipe
         </Button>
@@ -141,19 +72,19 @@ RecipeForm.propTypes = {
     name: PropTypes.string.isRequired,
     instructions: PropTypes.string.isRequired,
   }),
-  ingredients: PropTypes.shape({
-    id: PropTypes.number,
-    user: PropTypes.shape({}),
-    name: PropTypes.string,
-    in_stock: PropTypes.string,
-  }),
+  // ingredients: PropTypes.shape({
+  //   id: PropTypes.number,
+  //   user: PropTypes.shape({}),
+  //   ingredientname: PropTypes.string,
+  //   in_stock: PropTypes.string,
+  // }),
 };
 
 RecipeForm.defaultProps = {
   recipe: {
     recipeInitialState,
   },
-  ingredients: {
-    initialState,
-  },
+  // ingredients: {
+  //   initialState,
+  // },
 };

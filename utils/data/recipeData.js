@@ -36,7 +36,7 @@ const createRecipe = (recipe) => new Promise((resolve, reject) => {
     instructions: recipe?.instructions,
   };
   fetch(`${clientCredentials.databaseURL}/recipe`, {
-    method: 'Recipe',
+    method: 'POST',
     body: JSON.stringify(RecipeObj),
     headers: {
       'content-type': 'application/json',

@@ -7,6 +7,13 @@ const getPantryIngredients = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const AllPantryIngredientsByPantry = (pantryId) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/pantry-ingredients/${pantryId}/`)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 const getPantryIngredientsByUser = (userId) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/user-pantryingredient/${userId}/`)
     .then((response) => response.json())
@@ -29,12 +36,11 @@ const getSinglePantryIngredient = (pantryingredientId) => new Promise((resolve, 
 
 const createPantryIngredient = (pantryingredient) => new Promise((resolve, reject) => {
   const pantryingredientObj = {
-    id: pantryingredient?.id,
     pantry: pantryingredient?.pantry,
     ingredient: pantryingredient?.ingredient,
   };
   fetch(`${clientCredentials.databaseURL}/pantryingredient`, {
-    method: 'pantryingredient',
+    method: 'POST',
     body: JSON.stringify(pantryingredientObj),
     headers: {
       'content-type': 'application/json',
@@ -69,5 +75,5 @@ const deletePantryIngredient = (id) => new Promise((resolve, reject) => {
 });
 
 export {
-  getPantryIngredients, getSinglePantryIngredient, createPantryIngredient, updatePantryIngredient, deletePantryIngredient, getPantryIngredientsByUser,
+  getPantryIngredients, getSinglePantryIngredient, createPantryIngredient, updatePantryIngredient, deletePantryIngredient, getPantryIngredientsByUser, AllPantryIngredientsByPantry,
 };

@@ -46,7 +46,7 @@ const createWeek = (week) => new Promise((resolve, reject) => {
     sunday: week?.sunday,
   };
   fetch(`${clientCredentials.databaseURL}/week`, {
-    method: 'Week',
+    method: 'POST',
     body: JSON.stringify(WeekObj),
     headers: {
       'content-type': 'application/json',

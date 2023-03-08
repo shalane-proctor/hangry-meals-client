@@ -36,7 +36,7 @@ const createIngredient = (ingredient) => new Promise((resolve, reject) => {
     in_stock: ingredient?.in_stock,
   };
   fetch(`${clientCredentials.databaseURL}/ingredient`, {
-    method: 'ingredient',
+    method: 'POST',
     body: JSON.stringify(ingredientObj),
     headers: {
       'content-type': 'application/json',
