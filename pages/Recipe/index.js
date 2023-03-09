@@ -1,16 +1,20 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import RecipeCards from '../../components/Cards/recipeDetails';
+import { Button } from 'react-bootstrap';
+import RecipeCards from '../../components/Cards/recipeCard';
+import { useAuth } from '../../utils/context/authContext';
 import { getRecipesByUser } from '../../utils/data/recipeData';
 
-function Recipe() {
+export default function Recipe() {
   const [recipe, setRecipe] = useState([]);
+  const { user } = useAuth();
   const getAllRecipesByUser = () => {
-    getRecipesByUser().then(setRecipe);
+    getRecipesByUser(user.id).then(setRecipe);
   };
   useEffect(() => {
     getAllRecipesByUser();
-  }, []);
+  }, [user]);
   return (
     <>
       <Head>
@@ -20,10 +24,10 @@ function Recipe() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hangry Meals</title>
       </Head>
-      {recipe.map((data) => (
-        <RecipeCards key={data.id} recipe={data} onUpdate={getAllRecipesByUser} />))}
+      <Link href="/Recipe/new" passHref>
+        <Button>Add Recipe</Button>
+      </Link>
+      {recipe.map((data, index) => (index === 0 ? '' : (<RecipeCards key={data.id} recipe={data} onUpdate={getAllRecipesByUser} />)))}
     </>
   );
 }
-
-export default Recipe;

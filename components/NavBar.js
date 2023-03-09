@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
 import Link from 'next/link';
 import {
   Navbar, //
@@ -8,8 +7,11 @@ import {
   Button,
 } from 'react-bootstrap';
 import { signOut } from '../utils/auth';
+import { useAuth } from '../utils/context/authContext';
 
 export default function NavBar() {
+  const { user } = useAuth();
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -25,10 +27,10 @@ export default function NavBar() {
             <Link passHref href="/Week/">
               <Nav.Link>Next Week</Nav.Link>
             </Link>
-            <Link passHref href="/Pantry/">
+            <Link passHref href={`/Pantry/${user?.id}`}>
               <Nav.Link>Pantry</Nav.Link>
             </Link>
-            <Link passHref href="/Recipes/">
+            <Link passHref href="/Recipe/">
               <Nav.Link>Recipes</Nav.Link>
             </Link>
             <Button variant="danger" onClick={signOut}>

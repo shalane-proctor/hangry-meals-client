@@ -6,6 +6,7 @@ import { Button, FloatingLabel } from 'react-bootstrap';
 import { registerUser } from '../../utils/auth';
 import { updateUserProfile } from '../../utils/data/userData';
 import { createPantry } from '../../utils/data/pantryData';
+import { createRecipe } from '../../utils/data/recipeData';
 
 export default function UserForm({ user, updateUser }) {
   const [formInput, setFormInput] = useState();
@@ -24,6 +25,12 @@ export default function UserForm({ user, updateUser }) {
     } else {
       registerUser(user, formInput).then(() => updateUser(user.uid));
       createPantry(user.uid).then();
+      const goingOut = {
+        user: user.uid,
+        name: 'Going out to eat!',
+        instructions: 'Go have fun!',
+      };
+      createRecipe(goingOut).then();
       router.push('/');
     }
   };

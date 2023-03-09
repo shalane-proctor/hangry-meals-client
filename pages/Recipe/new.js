@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import RecipeForm from '../../components/Forms/recipeForm';
 
-export default function NewTrade() {
+export default function NewRecipe() {
   return (
     <>
       <Head>
