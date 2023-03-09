@@ -1,32 +1,23 @@
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import { deleteRecipe } from '../../utils/data/recipeData';
 
-export default function RecipeDetails({ recipe }) {
-  const router = useRouter();
-  const deleteThisRecipe = () => {
-    if (window.confirm(`Delete ${recipe?.name}?`)) {
-      deleteRecipe(recipe?.id).then(() => router.push('/'));
-    }
-  };
-
+export default function RecipeCards({ recipe }) {
   return (
     <>
       <Card style={{ width: '18rem' }}>
         <Card.Body>
           <Card.Title>{recipe?.name}</Card.Title>
           <Card.Text>{recipe?.instructions}</Card.Text>
-          <Card.Link href={`/Recipe/edit/${recipe?.id}`}>Edit</Card.Link>
-          <Button onClick={deleteThisRecipe}>Delete</Button>
+          <Link href={`/Recipe/${recipe?.id}`} passHref><Button>View</Button></Link>
         </Card.Body>
       </Card>
     </>
   );
 }
 
-RecipeDetails.propTypes = {
+RecipeCards.propTypes = {
   recipe: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -34,7 +25,7 @@ RecipeDetails.propTypes = {
   }),
 };
 
-RecipeDetails.defaultProps = {
+RecipeCards.defaultProps = {
   recipe: {
     id: '',
     name: 'Add Name',

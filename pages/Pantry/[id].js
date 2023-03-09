@@ -31,7 +31,7 @@ export default function Pantry() {
       </Link>
       <ListGroup>
         {pantryIngredient?.map((data) => (
-          <IngredientCards key={data?.id} ingredient={data?.ingredient} onUpdate={getAllPantryIngredients} />
+          <IngredientCards key={data?.ingredient?.id} ingredient={data?.ingredient} onUpdate={getAllPantryIngredients} />
         ))}
       </ListGroup>
     </>

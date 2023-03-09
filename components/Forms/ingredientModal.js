@@ -3,17 +3,19 @@ import React, { useState } from 'react';
 import { FloatingLabel, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useAuth } from '../../utils/context/authContext';
 import { createIngredient } from '../../utils/data/ingredientsData';
 import { createRecipeIngredient } from '../../utils/data/recipeIngredientsData';
 
-function IngredientModal({ recipeId }) {
+export default function IngredientModal({ recipeId, onUpdate, user }) {
   const [show, setShow] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [formInput, setFormInput] = useState();
-  const { user } = useAuth();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setFormInput('');
+    setIsChecked(false);
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +33,7 @@ function IngredientModal({ recipeId }) {
     e.preventDefault();
     const payload = {
       name: formInput.name,
-      user: user.uid,
+      user: user?.uid,
       in_stock: isChecked,
     };
     createIngredient(payload).then((ingredientId) => {
@@ -39,7 +41,8 @@ function IngredientModal({ recipeId }) {
         recipe: recipeId,
         ingredient: ingredientId?.id,
       };
-      createRecipeIngredient(recipePayload).then(() => handleClose);
+      createRecipeIngredient(recipePayload).then(() => onUpdate());
+      handleClose();
     });
   };
 
@@ -78,11 +81,14 @@ function IngredientModal({ recipeId }) {
 IngredientModal.propTypes = {
   ingredients: PropTypes.shape({
     id: PropTypes.number,
-    user: PropTypes.shape({}),
     name: PropTypes.string,
     in_stock: PropTypes.bool,
   }),
-  recipeId: PropTypes.number.isRequired,
+  recipeId: PropTypes.number,
+  onUpdate: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    uid: PropTypes.string,
+  }).isRequired,
 };
 
 IngredientModal.defaultProps = {
@@ -92,4 +98,5 @@ IngredientModal.defaultProps = {
     name: 'No Name',
     in_stock: false,
   },
+  recipeId: 0,
 };

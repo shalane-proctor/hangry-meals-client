@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
+import { useRouter } from 'next/router';
 import { useAuth } from '../../utils/context/authContext';
 import { createRecipe, updateRecipe } from '../../utils/data/recipeData';
 
@@ -16,6 +17,7 @@ const recipeInitialState = {
 export default function RecipeForm({ recipe }) {
   const [formInput, setFormInput] = useState();
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (recipe.id) {
@@ -34,16 +36,19 @@ export default function RecipeForm({ recipe }) {
     e.preventDefault();
     if (recipe.id) {
       const payload = {
-        ...formInput,
-      };
-      updateRecipe(payload).then();
-    } else {
-      const payload = {
-        name: recipe.name,
-        instructions: recipe.instructions,
+        id: recipe.id,
+        name: formInput.name,
+        instructions: formInput.instructions,
         user: user.uid,
       };
-      createRecipe(payload).then();
+      updateRecipe(payload).then(() => router.push(`/Recipe/${recipe.id}`));
+    } else {
+      const payload = {
+        name: formInput.name,
+        instructions: formInput.instructions,
+        user: user.uid,
+      };
+      createRecipe(payload).then((data) => router.push(`/Recipe/${data.id}`));
     }
   };
 
@@ -72,19 +77,10 @@ RecipeForm.propTypes = {
     name: PropTypes.string.isRequired,
     instructions: PropTypes.string.isRequired,
   }),
-  // ingredients: PropTypes.shape({
-  //   id: PropTypes.number,
-  //   user: PropTypes.shape({}),
-  //   ingredientname: PropTypes.string,
-  //   in_stock: PropTypes.string,
-  // }),
 };
 
 RecipeForm.defaultProps = {
   recipe: {
     recipeInitialState,
   },
-  // ingredients: {
-  //   initialState,
-  // },
 };

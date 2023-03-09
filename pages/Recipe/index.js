@@ -2,11 +2,11 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import RecipeCards from '../../components/Cards/recipeDetails';
+import RecipeCards from '../../components/Cards/recipeCard';
 import { useAuth } from '../../utils/context/authContext';
 import { getRecipesByUser } from '../../utils/data/recipeData';
 
-function Recipe() {
+export default function Recipe() {
   const [recipe, setRecipe] = useState([]);
   const { user } = useAuth();
   const getAllRecipesByUser = () => {
@@ -14,7 +14,7 @@ function Recipe() {
   };
   useEffect(() => {
     getAllRecipesByUser();
-  }, []);
+  }, [user]);
   return (
     <>
       <Head>
@@ -27,11 +27,7 @@ function Recipe() {
       <Link href="/Recipe/new" passHref>
         <Button>Add Recipe</Button>
       </Link>
-      {recipe.map((data) => (
-        <RecipeCards key={data.id} recipe={data} onUpdate={getAllRecipesByUser} />
-      ))}
+      {recipe.map((data, index) => (index === 0 ? '' : (<RecipeCards key={data.id} recipe={data} onUpdate={getAllRecipesByUser} />)))}
     </>
   );
 }
-
-export default Recipe;

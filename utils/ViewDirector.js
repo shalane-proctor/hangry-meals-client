@@ -16,7 +16,7 @@ const ViewDirectorBasedOnUserAuthStatus = ({ component: Component, pageProps }) 
   if (user) {
     return (
       <>
-        <NavBar />
+        <NavBar userId={user} />
         <div className="container">{'valid' in user ? <UserForm user={user} updateUser={updateUser} /> : <Component {...pageProps} />}</div>
       </>
     );

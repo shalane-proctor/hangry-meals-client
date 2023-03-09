@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import WeekForm from '../../components/Forms/weeksForm';
+import WeekForm from '../../../components/Forms/weeksForm';
 
 export default function NewTrade() {
   return (

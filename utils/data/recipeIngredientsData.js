@@ -33,7 +33,7 @@ const createRecipeIngredient = (recipeingredient) => new Promise((resolve, rejec
     recipe: recipeingredient?.recipe,
     ingredient: recipeingredient?.ingredient,
   };
-  fetch(`${clientCredentials.databaseURL}/recipeingredient`, {
+  fetch(`${clientCredentials.databaseURL}/recipeingredients`, {
     method: 'POST',
     body: JSON.stringify(recipeingredientObj),
     headers: {
