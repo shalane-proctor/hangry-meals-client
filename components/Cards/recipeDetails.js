@@ -1,25 +1,37 @@
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import { deleteRecipe } from '../../utils/data/recipeData';
+import { useAuth } from '../../utils/context/authContext';
+import { deleteRecipe, getRecipesByUser } from '../../utils/data/recipeData';
 
 export default function RecipeDetails({ recipe }) {
   const router = useRouter();
+  const { user } = useAuth();
+  const [goingOut, setGoingOut] = useState({});
   const deleteThisRecipe = () => {
     if (window.confirm(`Delete ${recipe?.name}?`)) {
       deleteRecipe(recipe?.id).then(() => router.push('/'));
     }
   };
 
+  useEffect(() => {
+    getRecipesByUser(user.id).then((data) => setGoingOut(data[0]));
+  }, [user]);
+
   return (
     <>
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: '100%' }}>
         <Card.Body>
           <Card.Title>{recipe?.name}</Card.Title>
-          <Card.Text>{recipe?.instructions}</Card.Text>
-          <Card.Link href={`/Recipe/edit/${recipe?.id}`}>Edit</Card.Link>
-          <Button onClick={deleteThisRecipe}>Delete</Button>
+          <Card.Text style={{ whiteSpace: 'pre-line' }}>{recipe?.instructions}</Card.Text>
+          {recipe?.id === goingOut?.id ? ''
+            : (
+              <div><Card.Link href={`/Recipe/edit/${recipe?.id}`}>Edit</Card.Link>
+                <Button style={{ background: 'white', border: 'none', color: 'black' }} onClick={deleteThisRecipe}>Delete</Button>
+              </div>
+            )}
         </Card.Body>
       </Card>
     </>

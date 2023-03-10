@@ -6,7 +6,7 @@ import RecipeCards from '../../components/Cards/recipeCard';
 import { useAuth } from '../../utils/context/authContext';
 import { getRecipesByUser } from '../../utils/data/recipeData';
 
-export default function Recipe() {
+export default function Recipes() {
   const [recipe, setRecipe] = useState([]);
   const { user } = useAuth();
   const getAllRecipesByUser = () => {

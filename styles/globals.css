@@ -30,3 +30,9 @@ full-background {
   background-position: center;
   background-size: cover;
 }
+.allRecipeInstruct {
+  overflow: hidden;
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+}

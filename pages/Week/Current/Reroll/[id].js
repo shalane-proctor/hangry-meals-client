@@ -1,20 +1,15 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import WeekForm from '../../../components/Forms/weeksForm';
-import { getSingleWeek } from '../../../utils/data/weekData';
+import WeekForm from '../../../../components/Forms/weeksForm';
+import { getSingleWeek } from '../../../../utils/data/weekData';
 
-export default function NewWeekEdit() {
+export default function RerollCurrentWeek() {
   const [week, setWeek] = useState({});
   const router = useRouter();
   const { id } = router.query;
-
-  const getNextWeek = () => {
-    getSingleWeek(id).then(setWeek);
-  };
-
   useEffect(() => {
-    getNextWeek();
+    getSingleWeek(id).then(setWeek);
   }, [id]);
 
   return (

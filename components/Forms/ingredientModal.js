@@ -1,15 +1,21 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FloatingLabel, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { createIngredient } from '../../utils/data/ingredientsData';
+import { getRecipesByUser } from '../../utils/data/recipeData';
 import { createRecipeIngredient } from '../../utils/data/recipeIngredientsData';
 
 export default function IngredientModal({ recipeId, onUpdate, user }) {
   const [show, setShow] = useState(false);
+  const [goingOut, setGoingOut] = useState({});
   const [isChecked, setIsChecked] = useState(false);
   const [formInput, setFormInput] = useState();
+
+  useEffect(() => {
+    getRecipesByUser(user.id).then((data) => setGoingOut(data[0]));
+  }, [user]);
 
   const handleClose = () => {
     setFormInput('');
@@ -49,28 +55,28 @@ export default function IngredientModal({ recipeId, onUpdate, user }) {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Add Ingredient
+        {recipeId === goingOut?.id ? 'Add Restraunt Ideas' : 'Add Ingredient'}
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Ingredient</Modal.Title>
+          <Modal.Title>{recipeId === goingOut?.id ? 'Add Restraunt Ideas' : 'Add Ingredient'}</Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
-          <FloatingLabel controlId="floatingTextarea" label="Ingredient" className="mb-3 all-my-form-labels">
+          <FloatingLabel controlId="floatingTextarea" label={recipeId === goingOut?.id ? 'Add Restraunt Ideas' : 'Ingredient'} className="mb-3 all-my-form-labels">
             <Form.Control className="all-my-form-input" as="textarea" placeholder="Ingredient" name="name" value={formInput?.name} onChange={handleChange} required />
           </FloatingLabel>
           <div>
             <label>
               <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
-              In Stock?
+              {recipeId === goingOut?.id ? 'Favorite' : 'In Stock?'}
             </label>
           </div>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
           <Button variant="info" size="lg" className="my-buttons" type="submit">
-            Add Ingredient
+            {recipeId === goingOut?.id ? 'Add Restraunt Ideas' : 'Add Ingredient'}
           </Button>
         </Form>
       </Modal>
@@ -87,6 +93,7 @@ IngredientModal.propTypes = {
   recipeId: PropTypes.number,
   onUpdate: PropTypes.func.isRequired,
   user: PropTypes.shape({
+    id: PropTypes.number,
     uid: PropTypes.string,
   }).isRequired,
 };

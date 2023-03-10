@@ -46,7 +46,6 @@ export default function PantryForm() {
     setIsChecked(e.target.checked);
   };
 
-  console.log(user, pantry, isChecked, formInput);
   return (
     <>
       <Form onSubmit={handleSubmit}>
