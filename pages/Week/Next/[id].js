@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import WeekCards from '../../../components/Cards/weekDetails';
 import { getSingleWeek } from '../../../utils/data/weekData';
 
@@ -24,6 +27,9 @@ function Week() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hangry Meals</title>
       </Head>
+      <Link href={`/Week/Next/Reroll/${id}`} passHref>
+        <Button>Roll for Weeks</Button>
+      </Link>
       <WeekCards key={week.id} week={week} onUpdate={getWeek} />
     </>
   );

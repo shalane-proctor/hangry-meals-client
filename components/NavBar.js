@@ -22,10 +22,7 @@ export default function NavBar() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Link passHref href="/">
-              <Nav.Link>Current Week</Nav.Link>
-            </Link>
-            <Link passHref href="/Week/">
-              <Nav.Link>Next Week</Nav.Link>
+              <Nav.Link>Weeks Overiew</Nav.Link>
             </Link>
             <Link passHref href={`/Pantry/${user?.id}`}>
               <Nav.Link>Pantry</Nav.Link>

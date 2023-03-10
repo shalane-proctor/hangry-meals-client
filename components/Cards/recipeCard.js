@@ -6,10 +6,10 @@ import Card from 'react-bootstrap/Card';
 export default function RecipeCards({ recipe }) {
   return (
     <>
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: '100%' }}>
         <Card.Body>
           <Card.Title>{recipe?.name}</Card.Title>
-          <Card.Text>{recipe?.instructions}</Card.Text>
+          <Card.Text className="allRecipeInstruct">{recipe?.instructions}</Card.Text>
           <Link href={`/Recipe/${recipe?.id}`} passHref><Button>View</Button></Link>
         </Card.Body>
       </Card>

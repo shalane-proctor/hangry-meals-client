@@ -6,9 +6,6 @@ import Card from 'react-bootstrap/Card';
 export default function WeekCards({ week }) {
   return (
     <>
-      <Link href="Week/new" passHref>
-        <Button>Roll for Weeks</Button>
-      </Link>
       <Card className="Monday">
         <Card.Header>Monday</Card.Header>
         <Card.Body>

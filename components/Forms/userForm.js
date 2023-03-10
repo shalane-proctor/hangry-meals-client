@@ -23,15 +23,20 @@ export default function UserForm({ user, updateUser }) {
     if (user?.id) {
       updateUserProfile(formInput).then(() => router.push('/'));
     } else {
-      registerUser(user, formInput).then(() => updateUser(user.uid));
-      createPantry(user.uid).then();
-      const goingOut = {
-        user: user.uid,
-        name: 'Going out to eat!',
-        instructions: 'Go have fun!',
-      };
-      createRecipe(goingOut).then();
-      router.push('/');
+      registerUser(user, formInput).then(() => {
+        updateUser(user.uid);
+        const userPantry = {
+          user: user.uid,
+        };
+        createPantry(userPantry).then(() => {
+          const goingOut = {
+            user: user.uid,
+            name: 'Going out to eat!',
+            instructions: 'Go have fun!',
+          };
+          createRecipe(goingOut).then(() => router.push('/'));
+        });
+      });
     }
   };
 

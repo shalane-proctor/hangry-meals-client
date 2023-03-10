@@ -9,7 +9,7 @@ import { createRecipe, updateRecipe } from '../../utils/data/recipeData';
 
 const recipeInitialState = {
   id: 0,
-  user: 0,
+  user: {},
   name: '',
   instructions: '',
 };
@@ -74,8 +74,8 @@ RecipeForm.propTypes = {
   recipe: PropTypes.shape({
     id: PropTypes.number,
     user: PropTypes.shape({}),
-    name: PropTypes.string.isRequired,
-    instructions: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    instructions: PropTypes.string,
   }),
 };
 

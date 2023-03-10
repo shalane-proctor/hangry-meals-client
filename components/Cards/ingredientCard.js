@@ -13,7 +13,15 @@ export default function IngredientCards({ ingredient, onUpdate }) {
         <ListGroup.Item as="li" key={ingredient?.id}>
           {ingredient.in_stock ? '✅ ' : ''}
           {ingredient.name}
-          <Button variant="primary" type="button" className="my-buttons mb-3" onClick={deleteThisIngredient}>
+          <Button
+            variant="primary"
+            type="button"
+            className="my-buttons mb-3"
+            style={{
+              background: 'none', border: 'none', color: 'black', margin: '0px !important',
+            }}
+            onClick={deleteThisIngredient}
+          >
             X
           </Button>
         </ListGroup.Item>
