@@ -7,6 +7,13 @@ const getPantryIngredients = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getSinglePantryIngredients = (ingredientId) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/single-pantry-ingredients/${ingredientId}/`)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 const AllPantryIngredientsByPantry = (pantryId) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/pantry-ingredients/${pantryId}/`)
     .then((response) => response.json())
@@ -75,5 +82,5 @@ const deletePantryIngredient = (id) => new Promise((resolve, reject) => {
 });
 
 export {
-  getPantryIngredients, getSinglePantryIngredient, createPantryIngredient, updatePantryIngredient, deletePantryIngredient, getPantryIngredientsByUser, AllPantryIngredientsByPantry,
+  getPantryIngredients, getSinglePantryIngredient, createPantryIngredient, updatePantryIngredient, deletePantryIngredient, getPantryIngredientsByUser, AllPantryIngredientsByPantry, getSinglePantryIngredients,
 };

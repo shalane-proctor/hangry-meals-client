@@ -1,42 +1,16 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
 import { Button, ListGroup } from 'react-bootstrap';
-import { deleteIngredient } from '../../utils/data/ingredientsData';
-import { createPantryIngredient, getSinglePantryIngredients } from '../../utils/data/pantryIngredientsData';
+import { deletePantryIngredient } from '../../utils/data/pantryIngredientsData';
 
-export default function IngredientCards({ ingredient, pantry, onUpdate }) {
+export default function PantryIngredientCards({ ingredient, pantryIngredient, onUpdate }) {
   const deleteThisIngredient = () => {
-    deleteIngredient(ingredient?.id).then(() => onUpdate());
-  };
-
-  const [inPantry, setInPantry] = useState();
-
-  useEffect(() => {
-    getSinglePantryIngredients(ingredient?.id).then(setInPantry);
-  }, [ingredient]);
-
-  console.log(inPantry);
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    const payload = {
-      pantry: pantry?.id,
-      ingredient: ingredient?.id,
-    };
-    createPantryIngredient(payload).then(() => onUpdate());
+    deletePantryIngredient(pantryIngredient).then(() => onUpdate());
   };
 
   return (
     <>
       <ListGroup className="list-group-flush">
         <ListGroup.Item as="li" key={ingredient?.id}>
-          {inPantry?.id === undefined ? (
-            <Button variant="primary" type="button" className="my-buttons mb-3" onClick={handleClick}>
-              🫙
-            </Button>
-          ) : (
-            ''
-          )}
           {ingredient.in_stock ? ' ✅ ' : ''}
           {ingredient.name}
           <Button
@@ -59,7 +33,7 @@ export default function IngredientCards({ ingredient, pantry, onUpdate }) {
   );
 }
 
-IngredientCards.propTypes = {
+PantryIngredientCards.propTypes = {
   ingredient: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -69,9 +43,10 @@ IngredientCards.propTypes = {
     id: PropTypes.number,
   }),
   onUpdate: PropTypes.func.isRequired,
+  pantryIngredient: PropTypes.number,
 };
 
-IngredientCards.defaultProps = {
+PantryIngredientCards.defaultProps = {
   ingredient: PropTypes.shape({
     id: 0,
     name: '...',
@@ -80,4 +55,5 @@ IngredientCards.defaultProps = {
   pantry: {
     id: 0,
   },
+  pantryIngredient: 0,
 };
