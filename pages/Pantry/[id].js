@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
-import IngredientCards from '../../components/Cards/ingredientCard';
+import PantryIngredientCards from '../../components/Cards/pantryIngredientCard';
 import { getPantriesByUser } from '../../utils/data/pantryData';
 import { AllPantryIngredientsByPantry } from '../../utils/data/pantryIngredientsData';
 
@@ -31,7 +31,7 @@ export default function Pantry() {
       </Link>
       <ListGroup>
         {pantryIngredient?.map((data) => (
-          <IngredientCards key={data?.ingredient?.id} ingredient={data?.ingredient} onUpdate={getAllPantryIngredients} />
+          <PantryIngredientCards key={data?.ingredient?.id} ingredient={data?.ingredient} pantryIngredient={data.id} onUpdate={getAllPantryIngredients} />
         ))}
       </ListGroup>
     </>
